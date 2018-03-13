@@ -1,0 +1,88 @@
+#!/bin/bash
+
+source common.sh
+
+# save and clear screen
+tput smcup
+clear
+
+redrawAll
+
+while [ $working = 1 ];do
+	#Refresh screen
+	tput cup ${s} 0
+	tput ed
+
+	#Print menu
+	printCenter ${s}               "Main Menu"
+	printCenter $(expr "${s}" + 1) "─────────"
+	echo "  1. See Rules"
+	echo "  2. Input Data"
+	echo "  3. View Data"
+	echo "  4. Reset Data"
+	echo "  5. Exit"
+
+	# Print error and reset it
+	echo "${error}"
+	error=""
+	
+	# ask for choice
+	read -n1 -p "Your Choice: [menu item number] " selectItem
+	case $selectItem in
+	1)
+		# clear screen to show help
+		tput cup ${s} 0
+		tput ed
+		
+		bash rule.sh
+		redrawAll
+		;;
+	2) 
+		# clear screen for new script
+		tput cup ${s} 0
+		tput ed
+		
+		# get data and compute results
+		bash data-input.sh
+		awk -f view.awk data.csv > result.csv
+		;;
+	3)
+		# clear screen for data
+		tput cup ${s} 0
+		tput ed
+		
+		# find out how many lines to fill the rest of the screen
+		lines=$(tput lines)
+		lines=$(expr ${lines} - 21)
+
+		# show last lines in the revserse direction using a script
+		tail -n "${lines}" result.csv | tac | bash view.sh
+
+		read -n1 -p "Press any key to return. "
+		redrawAll 
+		;;
+	4)
+		# ask for confirmation
+		echo
+		#                  1         2         3         4         5         6         7
+		#         1234567890123456789012345678901234567890123456789012345678901234567890
+		question="This will delete all data, and will not be reversible. Are you sure?"
+		question=$( booleanInput "${question}")
+		if [ "${question}" = 1 ];then
+			rm data.csv
+			touch data.csv
+		fi
+		redrawAll
+		;;
+	5)
+		working=0
+		;;
+	*)
+		# print error in next reprint
+		error="error: Unknown menu choice: ${selectItem}"
+	esac
+done
+
+# exit program
+tput rmcup
+echo "Exit script. Goodbye."
