@@ -11,5 +11,5 @@ The project is a gamification of my to do list/gratitude journal.
 
 1. Has a small notebook handly.
 2. Install `gawk`
-3. Run [this file](notebook) in ubuntu system.
+3. Run [this file](notebooks) in ubuntu system.
 4. More help can be found in the script.
