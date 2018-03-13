@@ -17,8 +17,6 @@ while [ ${page} != -1 ];do
 			printCenter ${min}             "Help Menu"
 			printCenter $(expr ${min} + 1) "─────────"
 			echo " Help Page (You can access them in any help page)."
-#                          1         2         3         4         5         6         7         8
-#                 12345678901234567890123456789012345678901234567890123456789012345678901234567890
 			mainMenu "  0. This page"       "  4. Todo Items Rules"
 			mainMenu "  1. Notebook Format" "  5. Todo Item Types"
 			mainMenu "  2. Scoring Rules      " "  6.   Grateful Items Rules"
